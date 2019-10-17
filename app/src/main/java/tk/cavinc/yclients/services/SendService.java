@@ -203,7 +203,6 @@ public class SendService extends Service {
 
         builder.setContentIntent(contentIntent)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentText("Sending message")
                 .setWhen(System.currentTimeMillis())
                 .setOngoing(false)
                 .setAutoCancel(true);
