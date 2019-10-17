@@ -8,6 +8,10 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <!--
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 
     <application
@@ -31,9 +35,14 @@
             android:name=".services.CallReceiver"
             android:enabled="true"
             android:exported="true">
-            <intent-filter>
+            <intent-filter android:priority="9999">
                 <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
+            <!--
+            <intent-filter android:priority="10000">
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
+            </intent-filter>
+            -->
         </receiver>
 
         <service

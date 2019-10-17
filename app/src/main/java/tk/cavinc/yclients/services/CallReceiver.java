@@ -3,9 +3,13 @@ package tk.cavinc.yclients.services;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
+
+//https://www.journaldev.com/23653/android-oreo-implicit-and-explicit-broadcast-receiver
+//http://qaru.site/questions/7202892/oreo-broadcast-receiver-not-working
 
 public class CallReceiver extends BroadcastReceiver {
     private static boolean incomingCall = false;
@@ -37,7 +41,11 @@ public class CallReceiver extends BroadcastReceiver {
                     Intent sendData = new Intent(context, SendService.class);
                     sendData.putExtra("phone", phoneNr);
                     sendData.putExtra("direct", 1);
-                    context.startService(sendData);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                        context.startForegroundService(sendData);
+                    } else {
+                        context.startService(sendData);
+                    }
                 }
             } else if (phoneState.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                 // завершение вызова

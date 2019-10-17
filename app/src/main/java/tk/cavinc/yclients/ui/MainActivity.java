@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import tk.cavinc.yclients.R;
+import tk.cavinc.yclients.services.CallReceiver;
 import tk.cavinc.yclients.services.SendService;
 import tk.cavinc.yclients.utils.App;
 
@@ -49,7 +50,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 requestPermissions(new String[]{Manifest.permission.READ_CALL_LOG},REQUEST_PHONE);
             }
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            registryBroadcard();
+        }
+    }
 
+    private void registryBroadcard(){
+        Intent intent = new Intent("android.intent.action.PHONE_STATE");
+        intent.setClass(this, CallReceiver.class);
     }
 
     @Override

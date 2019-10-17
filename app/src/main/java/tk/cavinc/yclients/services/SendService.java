@@ -1,5 +1,9 @@
 package tk.cavinc.yclients.services;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +11,9 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,15 +25,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import tk.cavinc.yclients.R;
 import tk.cavinc.yclients.utils.App;
 
 import static tk.cavinc.yclients.ui.MainActivity.URL_STR;
 
 public class SendService extends Service {
+    private static final String TAG = "SS";
     private SharedPreferences mSharedPreferences;
+    private Context mContext;
 
     public SendService() {
         mSharedPreferences = App.getSharedPreferences();
+        mContext = App.getContext();
     }
 
     @Override
@@ -50,6 +60,7 @@ public class SendService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        setNotification();
         final String phone = intent.getStringExtra("phone");
         int mode = intent.getIntExtra("direct",0);
         final String url = mSharedPreferences.getString(URL_STR,null);
@@ -150,6 +161,62 @@ public class SendService extends Service {
         } catch (Exception e){
             e.printStackTrace();
         }
+        notifyDelete();
+        //stopSelf();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG,"DESTROY");
+        stopForeground(true);
+        stopSelf();
+        super.onDestroy();
+    }
+
+    private static final String CHANEL_ID = "tk.cavinc.yclients.SERVICE";
+    public static final int DEFAULT_NOTIFICATION_ID = 101;
+
+    private void setNotification(){
+        NotificationManager notificationManager = (NotificationManager) mContext
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        //для А8+
+        if (Build.VERSION.SDK_INT >= 26) {
+            NotificationChannel channel = new NotificationChannel(CHANEL_ID,"Reminder",NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Reminder");
+            channel.enableLights(true);
+            channel.enableVibration(true);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        Notification notification = null;
+        Intent intent = new Intent();
+        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(),
+                0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            builder = new Notification.Builder(mContext,CHANEL_ID);
+        } else {
+            builder = new Notification.Builder(mContext);
+        }
+
+        builder.setContentIntent(contentIntent)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentText("Sending message")
+                .setWhen(System.currentTimeMillis())
+                .setOngoing(true)
+                .setAutoCancel(true);
+
+        notification = builder.build();
+        //startForeground(DEFAULT_NOTIFICATION_ID, notification);
+        notificationManager.notify(DEFAULT_NOTIFICATION_ID,notification);
+    }
+
+    private void notifyDelete() {
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(DEFAULT_NOTIFICATION_ID);
     }
 
 }
