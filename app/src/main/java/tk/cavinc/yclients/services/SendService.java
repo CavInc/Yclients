@@ -205,12 +205,15 @@ public class SendService extends Service {
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentText("Sending message")
                 .setWhen(System.currentTimeMillis())
-                .setOngoing(true)
+                .setOngoing(false)
                 .setAutoCancel(true);
 
         notification = builder.build();
-        //startForeground(DEFAULT_NOTIFICATION_ID, notification);
-        notificationManager.notify(DEFAULT_NOTIFICATION_ID,notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForeground(DEFAULT_NOTIFICATION_ID, notification);
+        } else {
+            notificationManager.notify(DEFAULT_NOTIFICATION_ID, notification);
+        }
     }
 
     private void notifyDelete() {

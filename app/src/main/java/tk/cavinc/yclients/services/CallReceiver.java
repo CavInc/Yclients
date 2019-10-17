@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 //https://www.journaldev.com/23653/android-oreo-implicit-and-explicit-broadcast-receiver
 //http://qaru.site/questions/7202892/oreo-broadcast-receiver-not-working
+//https://jollydroid.ru/notebook/2019-06-28-android-broadcast-old-way
 
 public class CallReceiver extends BroadcastReceiver {
     private static boolean incomingCall = false;
