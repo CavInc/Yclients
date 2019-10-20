@@ -11,6 +11,7 @@
     <!--
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
     -->
+
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 
@@ -35,16 +36,15 @@
             android:name=".services.CallReceiver"
             android:enabled="true"
             android:exported="true">
-            <intent-filter android:priority="9999">
+            <intent-filter android:priority="999">
                 <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
             <!--
-            <intent-filter android:priority="10000">
+            <intent-filter android:priority="999">
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
             </intent-filter>
             -->
         </receiver>
-
         <service
             android:name=".services.SendService"
             android:enabled="true"

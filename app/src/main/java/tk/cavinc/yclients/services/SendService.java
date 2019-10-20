@@ -162,7 +162,7 @@ public class SendService extends Service {
             e.printStackTrace();
         }
         notifyDelete();
-        //stopSelf();
+        stopSelf();
     }
 
     @Override
@@ -202,7 +202,7 @@ public class SendService extends Service {
         }
 
         builder.setContentIntent(contentIntent)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_all_out_black_24dp)
                 .setWhen(System.currentTimeMillis())
                 .setOngoing(false)
                 .setAutoCancel(true);
@@ -216,6 +216,7 @@ public class SendService extends Service {
     }
 
     private void notifyDelete() {
+        Log.d(TAG,"Нотифу дел");
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(DEFAULT_NOTIFICATION_ID);
