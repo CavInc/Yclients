@@ -12,7 +12,6 @@ import android.widget.EditText;
 
 import tk.cavinc.yclients.R;
 import tk.cavinc.yclients.services.CallReceiver;
-import tk.cavinc.yclients.services.SendService;
 import tk.cavinc.yclients.utils.App;
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -84,11 +83,5 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         store();
-        /*
-        Intent sendData = new Intent(this, SendService.class);
-        sendData.putExtra("phone", "333333");
-        sendData.putExtra("direct", 0);
-        startService(sendData);
-        */
     }
 }
